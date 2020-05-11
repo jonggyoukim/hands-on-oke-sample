@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: oke-sample
+  labels:
+    app: oke-sample
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: oke-sample
+    tier: frontend
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oke-sample
+  labels:
+    app: oke-sample
+spec:
+  selector:
+    matchLabels:
+      app: oke-sample
+      tier: frontend
+
+  template:
+    metadata:
+      labels:
+        app: oke-sample
+        tier: frontend
+    spec:
+      containers:
+      - name: oke-sample
+        image: shiftyou/oke-sample
+        env:
+        - name: MYSQL_SERVICE_HOST
+          value: oke-mysql
+        - name: MYSQL_SERVICE_USER
+          value: test
+        - name: MYSQL_SERVICE_PASSWORD
+          value: Welcome1
+        - name: MYSQL_SERVICE_DATABASE
+          value: sample
+        ports:
+        - containerPort: 8080
+          name: oke-sample
+---

@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: oke-mysql
+  labels:
+    app: oke-mysql
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: oke-mysql
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oke-mysql
+  labels:
+    app: oke-mysql
+spec:
+  selector:
+    matchLabels:
+      app: oke-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: oke-mysql
+    spec:
+      containers:
+        - name: oke-mysql
+          image: shiftyou/oke-mysql
+          ports:
+          - containerPort: 3306
+            name: oke-mysql
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: password
