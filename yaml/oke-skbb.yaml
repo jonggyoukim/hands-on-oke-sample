@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oke-skbb
+  labels:
+    app: oke-skbb
+spec:
+  selector:
+    matchLabels:
+      app: oke-skbb
+
+  template:
+    metadata:
+      labels:
+        app: oke-skbb
+    spec:
+      containers:
+      - name: oke-skbb
+        image: kym6414/study:test
+        ports:
+        - containerPort: 8080
+          name: oke-skbb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oke-skbb
+  labels:
+    app: oke-skbb
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: oke-skbb
+  type: LoadBalancer
